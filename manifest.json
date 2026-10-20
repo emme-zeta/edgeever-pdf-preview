@@ -2,7 +2,7 @@
   "type": "plugin",
   "id": "it.oxigeno.pdf-preview",
   "name": "PDF Preview",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "apiVersion": "2",
   "settingsUi": "host",
   "description": "Inline preview of PDF attachments inside notes (uses the browser's native PDF viewer).",
