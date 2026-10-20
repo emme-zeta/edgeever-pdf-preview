@@ -10,12 +10,22 @@ export default {
 
     const asArray = (res) => {
       if (Array.isArray(res)) return res;
-      if (res && Array.isArray(res.resources)) return res.resources;
-      if (res && Array.isArray(res.items)) return res.items;
-      if (res && Array.isArray(res.data)) return res.data;
-      if (res && Array.isArray(res.attachments)) return res.attachments;
+      if (!res || typeof res !== "object") return [];
+      for (const k of ["resources", "items", "data", "attachments", "list", "results", "rows", "files", "edges"]) {
+        if (Array.isArray(res[k])) return res[k];
+      }
+      // one level deeper (e.g. { data: { resources: [...] } })
+      for (const k of Object.keys(res)) {
+        const v = res[k];
+        if (v && typeof v === "object" && !Array.isArray(v)) {
+          for (const k2 of ["resources", "items", "data", "attachments", "list", "results", "rows", "files", "edges"]) {
+            if (Array.isArray(v[k2])) return v[k2];
+          }
+        }
+      }
       return [];
     };
+    const shapeOf = (res) => Array.isArray(res) ? ("array[" + res.length + "]") : (res && typeof res === "object" ? ("{" + Object.keys(res).slice(0, 8).join(",") + "}") : String(typeof res));
     const mimeOf = (r) => String((r && (r.mimeType || r.mime || r.contentType || r.content_type || r.type)) || "").toLowerCase();
     const nameOf = (r) => String((r && (r.filename || r.fileName || r.name || r.title || r.objectKey || r.object_key || r.url)) || "");
     const isPdf = (r) => mimeOf(r).includes("pdf") || nameOf(r).toLowerCase().endsWith(".pdf");
@@ -64,7 +74,7 @@ export default {
       const pdfs = all.filter(isPdf);
       if (!pdfs.length) {
         const sample = all.length ? (" | es: " + resName(all[0]) + " [" + (mimeOf(all[0]) || "?") + "]") : "";
-        notice("PDF Preview diag — nota " + String(noteId).slice(-8) + " · allegati=" + all.length + " · pdf=0" + sample);
+        notice("PDF diag — nota " + String(noteId).slice(-8) + " · allegati=" + all.length + " · res=" + shapeOf(res) + sample);
       }
       return { noteId, pdfs, all };
     }
@@ -108,8 +118,8 @@ export default {
       }));
     } catch (e) { log("commands.register failed", e); }
 
-    notice("PDF Preview v0.1.2 attivo");
-    log("activated v0.1.2");
+    notice("PDF Preview v0.1.3 attivo");
+    log("activated v0.1.3");
     return () => { disposers.forEach((d) => { try { if (d) d(); } catch (e) {} }); };
   }
 };
