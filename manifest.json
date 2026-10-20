@@ -1,0 +1,26 @@
+{
+  "type": "plugin",
+  "id": "it.oxigeno.pdf-preview",
+  "name": "PDF Preview",
+  "version": "0.1.0",
+  "apiVersion": "2",
+  "settingsUi": "host",
+  "description": "Inline preview of PDF attachments inside notes (uses the browser's native PDF viewer).",
+  "locales": {
+    "it": {
+      "name": "Anteprima PDF",
+      "description": "Mostra l'anteprima dei PDF allegati alle note (viewer nativo del browser)."
+    }
+  },
+  "entry": "./main.js",
+  "platforms": ["web", "desktop"],
+  "permissions": [
+    "resources:read",
+    "editor:read",
+    "editor:write",
+    "ui:embeds",
+    "ui:commands",
+    "ui:panels",
+    "ui:notices"
+  ]
+}
