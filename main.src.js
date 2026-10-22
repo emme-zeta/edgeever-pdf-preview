@@ -200,8 +200,7 @@ export default {
       }));
     } catch (e) { log("commands.register failed", e); }
 
-    notice("PDF Preview v0.1.7 attivo");
-    log("activated v0.1.7 (pdf.js inline)");
+    log("activated v0.1.8 (pdf.js inline)");
     return () => { disposers.forEach((d) => { try { if (d) d(); } catch (e) {} }); };
   }
 };
